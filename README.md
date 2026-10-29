@@ -1,5 +1,3 @@
-# svyat03.github.io
-<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
