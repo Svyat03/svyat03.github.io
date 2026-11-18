@@ -54,6 +54,13 @@
   .cta { margin: 26px 0 0; text-align: center; }
   .phone { margin: 14px 0 0; font-size: 17px; color: var(--muted); }
   .phone a { color: var(--maroon); font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .copy-phone {
+    background: none; border: 0; padding: 6px 4px; margin: 0;
+    font: inherit; font-size: 18px; font-weight: 600;
+    color: var(--maroon); cursor: pointer; white-space: nowrap;
+    border-bottom: 1px dashed var(--saffron);
+  }
+  .copy-phone:hover, .copy-phone:focus { color: var(--terracotta); }
 
   .divider { display: block; width: 180px; height: 18px; margin: 30px auto 6px; }
 
@@ -130,7 +137,7 @@
     <p class="cta">
       <a class="btn" href="https://wa.me/message/QZM7REX2443YI1">Записаться в WhatsApp</a>
     </p>
-    <p class="phone">Или напишите: <a href="tel:+77064123604">+7 706 412-36-04</a></p>
+    <p class="phone"><button type="button" class="copy-phone" data-phone="+77064123604" aria-label="Скопировать номер телефона">+7 706 412-36-04</button></p>
   </header>
 
   <!-- Разделитель -->
@@ -159,15 +166,11 @@
       <li>Назовите удобные день и время, и скажите, где вам удобнее: у меня или у вас дома.</li>
       <li>Я подтвержу запись, и мы встретимся.</li>
     </ol>
-    <p class="cta">
-      <a class="btn" href="https://wa.me/message/QZM7REX2443YI1">Написать Святославу</a>
-    </p>
-    <p class="phone" style="text-align:center">Телефон: <a href="tel:+77064123604">+7 706 412-36-04</a></p>
   </section>
 
   <section class="card">
     <h2>Когда массаж лучше отложить</h2>
-    <p>Мне важно, чтобы сеанс был для вас безопасным. В следующих случаях массаж лучше отложить или заранее согласовать с врачом:</p>
+    <p>Мне важно, чтобы сеанс был для вас безопасным. В этих случаях массаж лучше отложить или заранее согласовать с врачом:</p>
     <ul class="contra">
       <li>
         <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="#b5532f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8a3 3 0 0 1 6 0v14.5a6 6 0 1 1-6 0z"/><path d="M20 14v12"/></g><circle cx="20" cy="29" r="2.4" fill="#e8a33d"/></svg>
@@ -202,10 +205,15 @@
         <span><strong>Алкогольное опьянение</strong>, тяжёлое общее состояние и обострение хронических болезней</span>
       </li>
     </ul>
-    <p>Это общий список и он не является исчерпывающим. Если сомневаетесь - посоветуйтесь с врачом.</p>
+    <p>Этот список общий и не исчерпывающий. Если сомневаетесь, напишите мне перед записью или посоветуйтесь с врачом.</p>
   </section>
 
-  <p class="note">Массаж не заменяет консультацию врача и имеет противопоказания. При записи сообщите, если у вас есть проблемы со здоровьем.</p>
+  <section class="cta">
+    <a class="btn" href="https://wa.me/message/QZM7REX2443YI1">Записаться в WhatsApp</a>
+    <p class="phone"><button type="button" class="copy-phone" data-phone="+77064123604" aria-label="Скопировать номер телефона">+7 706 412-36-04</button></p>
+  </section>
+
+  <p class="note">Массаж не заменяет консультацию врача и имеет противопоказания. При записи сообщите, если у вас есть проблемы со здоровьем, и мы всё обсудим.</p>
 
 </main>
 
@@ -213,6 +221,38 @@
 <svg class="frieze" viewBox="0 0 560 14" preserveAspectRatio="none" aria-hidden="true" style="transform: scaleY(-1)">
   <rect width="100%" height="14" fill="url(#toran)"/>
 </svg>
+
+<script>
+  (function () {
+    function fallbackCopy(text) {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    var buttons = document.querySelectorAll(".copy-phone");
+    Array.prototype.forEach.call(buttons, function (btn) {
+      var original = btn.textContent;
+      var timer = null;
+      btn.addEventListener("click", function () {
+        var text = btn.getAttribute("data-phone");
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(function () { fallbackCopy(text); });
+        } else {
+          fallbackCopy(text);
+        }
+        btn.textContent = "Номер скопирован";
+        clearTimeout(timer);
+        timer = setTimeout(function () { btn.textContent = original; }, 1800);
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>
